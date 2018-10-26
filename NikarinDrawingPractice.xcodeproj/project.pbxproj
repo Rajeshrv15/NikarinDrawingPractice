@@ -13,6 +13,8 @@
 		DED62D822181B7580094EAF7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DED62D802181B7580094EAF7 /* Main.storyboard */; };
 		DED62D842181B7670094EAF7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DED62D832181B7670094EAF7 /* Assets.xcassets */; };
 		DED62D872181B7670094EAF7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DED62D852181B7670094EAF7 /* LaunchScreen.storyboard */; };
+		DED62D8F218344660094EAF7 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62D8E218344660094EAF7 /* Utilities.swift */; };
+		DED62D91218344FB0094EAF7 /* SnapshotAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62D90218344FB0094EAF7 /* SnapshotAnchor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		DED62D832181B7670094EAF7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DED62D862181B7670094EAF7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DED62D882181B7670094EAF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DED62D8E218344660094EAF7 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		DED62D90218344FB0094EAF7 /* SnapshotAnchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotAnchor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +67,8 @@
 				DED62D832181B7670094EAF7 /* Assets.xcassets */,
 				DED62D852181B7670094EAF7 /* LaunchScreen.storyboard */,
 				DED62D882181B7670094EAF7 /* Info.plist */,
+				DED62D8E218344660094EAF7 /* Utilities.swift */,
+				DED62D90218344FB0094EAF7 /* SnapshotAnchor.swift */,
 			);
 			path = NikarinDrawingPractice;
 			sourceTree = "<group>";
@@ -139,7 +145,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DED62D8F218344660094EAF7 /* Utilities.swift in Sources */,
 				DED62D7F2181B7580094EAF7 /* ViewController.swift in Sources */,
+				DED62D91218344FB0094EAF7 /* SnapshotAnchor.swift in Sources */,
 				DED62D7B2181B7580094EAF7 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,6 +297,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MS594492KK;
 				INFOPLIST_FILE = NikarinDrawingPractice/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -307,6 +316,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MS594492KK;
 				INFOPLIST_FILE = NikarinDrawingPractice/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
