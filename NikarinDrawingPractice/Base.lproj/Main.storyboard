@@ -39,20 +39,44 @@
                                     </attributedString>
                                 </state>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AwE-0q-gOc" customClass="RoundedButton" customModule="NikarinDrawingPractice" customModuleProvider="target">
+                                <rect key="frame" x="280" y="45" width="70" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="0ER-br-Lcq"/>
+                                    <constraint firstAttribute="width" constant="70" id="Fyw-9r-Bxb"/>
+                                </constraints>
+                                <state key="normal">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="Save">
+                                            <attributes>
+                                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <font key="NSFont" size="24" name="Arial-BoldMT"/>
+                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                                <connections>
+                                    <action selector="clickSave:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Z6l-hw-5Ir"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="3kU-mj-sPu" secondAttribute="trailing" constant="25" id="0iS-e0-iFp"/>
+                            <constraint firstItem="AwE-0q-gOc" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="25" id="3jS-Cb-SzO"/>
                             <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="3kU-mj-sPu" secondAttribute="bottom" constant="25" id="BvY-xc-MuY"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="AwE-0q-gOc" secondAttribute="trailing" constant="25" id="lME-8w-MJK"/>
                             <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="3kU-mj-sPu" secondAttribute="trailing" constant="25" id="osB-ey-6ay"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
                     <connections>
+                        <outlet property="btnAnSave" destination="AwE-0q-gOc" id="nMq-Zp-m23"/>
                         <outlet property="btnDraw" destination="3kU-mj-sPu" id="oKN-k7-0an"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
                     </connections>

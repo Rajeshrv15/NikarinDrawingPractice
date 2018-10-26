@@ -14,7 +14,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     @IBOutlet weak var btnDraw: UIButton!
-    //@IBOutlet weak var btnSaveSession: UIButton!
+    @IBOutlet weak var btnAnSave: UIButton!
     
     var ndStartPost: SCNNode?
     var ndEndPost: SCNNode?
@@ -93,6 +93,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .horizontal
+        configuration.environmentTexturing = .automatic
         // Run the view's session
         sceneView.session.run(configuration)
         sceneView.debugOptions = [SCNDebugOptions.showFeaturePoints, SCNDebugOptions.showWorldOrigin]
@@ -161,18 +162,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     let virtualObjectAnchorName = "virtualObject"
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        /*switch frame.worldMappingStatus {
+        print("fun to enable disable save called")
+        switch frame.worldMappingStatus {
         case .extending, .mapped:
-            btnSaveSession.isEnabled =
+            btnAnSave.isEnabled =
                 virtualObjectAnchor != nil && frame.anchors.contains(virtualObjectAnchor!)
         default:
-            btnSaveSession.isEnabled = false
-        }*/
+            btnAnSave.isEnabled = false
+        }
     }
     
-    
-   @IBAction func SaveClick(_ sender: UIButton) {
-        /*sceneView.session.getCurrentWorldMap { worldMap, error in
+    @IBAction func clickSave(_ sender: UIButton) {
+        sceneView.session.getCurrentWorldMap { worldMap, error in
             guard let map = worldMap
                 else { self.showAlert(title: "Can't get current world map", message: error!.localizedDescription); return }
             
@@ -185,13 +186,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: map, requiringSecureCoding: true)
                 try data.write(to: self.mapSaveURL, options: [.atomic])
                 /*DispatchQueue.main.async {
-                    self.loadExperienceButton.isHidden = false
-                    self.loadExperienceButton.isEnabled = true
-                }*/
+                 self.loadExperienceButton.isHidden = false
+                 self.loadExperienceButton.isEnabled = true
+                 }*/
             } catch {
                 fatalError("Can't save map: \(error.localizedDescription)")
             }
-        }*/
+        }
     }
     
     func session(_ session: ARSession, didFailWithError error: Error) {

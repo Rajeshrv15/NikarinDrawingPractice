@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DEBB0431218354F100DBCD12 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBB0430218354F100DBCD12 /* RoundedButton.swift */; };
 		DED62D7B2181B7580094EAF7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62D7A2181B7580094EAF7 /* AppDelegate.swift */; };
 		DED62D7D2181B7580094EAF7 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = DED62D7C2181B7580094EAF7 /* art.scnassets */; };
 		DED62D7F2181B7580094EAF7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62D7E2181B7580094EAF7 /* ViewController.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DEBB0430218354F100DBCD12 /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 		DED62D772181B7580094EAF7 /* NikarinDrawingPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NikarinDrawingPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DED62D7A2181B7580094EAF7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DED62D7C2181B7580094EAF7 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 				DED62D882181B7670094EAF7 /* Info.plist */,
 				DED62D8E218344660094EAF7 /* Utilities.swift */,
 				DED62D90218344FB0094EAF7 /* SnapshotAnchor.swift */,
+				DEBB0430218354F100DBCD12 /* RoundedButton.swift */,
 			);
 			path = NikarinDrawingPractice;
 			sourceTree = "<group>";
@@ -146,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DED62D8F218344660094EAF7 /* Utilities.swift in Sources */,
+				DEBB0431218354F100DBCD12 /* RoundedButton.swift in Sources */,
 				DED62D7F2181B7580094EAF7 /* ViewController.swift in Sources */,
 				DED62D91218344FB0094EAF7 /* SnapshotAnchor.swift in Sources */,
 				DED62D7B2181B7580094EAF7 /* AppDelegate.swift in Sources */,
