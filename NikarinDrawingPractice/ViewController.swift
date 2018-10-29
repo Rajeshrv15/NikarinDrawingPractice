@@ -76,6 +76,34 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
     }
     
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        //1. Get The Current Touch Location
+        guard let currentTouchPoint = touches.first?.location(in: self.sceneView),
+            //2. Perform An ARHitTest For Detected Feature Points
+            let featurePointHitTest = self.sceneView.hitTest(currentTouchPoint, types: .featurePoint).first else { return }
+        
+        //3. Get The World Coordinates
+        let worldCoordinates = featurePointHitTest.worldTransform
+        
+        let anchor = ARAnchor(name: "AnjplsHelp", transform: worldCoordinates)
+        //let anchor = ARAnchor(transform: anchorTransform)
+        self.sceneView.session.add(anchor: anchor)
+        //4. Create An SCNNode With An SCNSphere Geeomtery
+        /*let sphereNode = SCNNode()
+        let sphereNodeGeometry = SCNSphere(radius: 0.005)
+        
+        //5. Generate A Random Colour For The Node's Geometry
+        //let randomColour = colours[Int(arc4random_uniform(UInt32(colours.count)))]
+        sphereNodeGeometry.firstMaterial?.diffuse.contents = UIColor.green
+        sphereNode.geometry = sphereNodeGeometry
+        
+        //6. Position & Add It To The Scene Hierachy
+        sphereNode.position = SCNVector3(worldCoordinates.columns.3.x,  worldCoordinates.columns.3.y,  worldCoordinates.columns.3.z)
+        self.sceneView.scene.rootNode.addChildNode(sphereNode)*/
+        
+    }
+    
     func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
         guard let pointofView = sceneView.pointOfView else {return}
         let transform = pointofView.transform
@@ -217,7 +245,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func generateSphereNode() -> SCNNode {
-        let sphere = SCNSphere(radius: 0.01)
+        let sphere = SCNSphere(radius: 0.006)
         //let sphere = SCNTorus(ringRadius: 0.01, pipeRadius: 0.001)
         let sphereNode = SCNNode()
         sphereNode.position.y += Float(sphere.radius)
