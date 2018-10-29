@@ -10,7 +10,7 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ViewController: UIViewController, ARSCNViewDelegate {
+class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     @IBOutlet weak var btnDraw: UIButton!
@@ -32,7 +32,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         } catch {
             fatalError("Can't get file save URL: \(error.localizedDescription)")
         }
+        print("mapSaveURL being called")
     }()
+    
+    var defaultConfiguration: ARWorldTrackingConfiguration {
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = .horizontal
+        configuration.environmentTexturing = .automatic
+        return configuration
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +59,29 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
         sceneView.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        guard ARWorldTrackingConfiguration.isSupported else {
+            fatalError("""
+                ARKit is not available on this device. For apps that require ARKit
+                for core functionality, use the `arkit` key in the key in the
+                `UIRequiredDeviceCapabilities` section of the Info.plist to prevent
+                the app from installing. (If the app can't be installed, this error
+                can't be triggered in a production scenario.)
+                In apps where AR is an additive feature, use `isSupported` to
+                determine whether to show UI for launching AR experiences.
+            """) // For details, see https://developer.apple.com/documentation/arkit
+        }
+        
+        // Start the view's AR session.
+        sceneView.session.delegate = self
+        
+        // Prevent the screen from being dimmed after a while as users will likely
+        // have long periods of interaction without touching the screen or buttons.
+        UIApplication.shared.isIdleTimerDisabled = true
         
     }
     
@@ -82,20 +113,37 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 })
                 self.sceneView.scene.rootNode.addChildNode(pointerNode)
                 //pointerNode.geometry?.firstMaterial?.diffuse.contents = UIColor.red
+                /*
+                // Remove exisitng anchor and add new anchor
+                if let existingAnchor = self.virtualObjectAnchor {
+                    self.sceneView.session.remove(anchor: existingAnchor)
+                }
+                virtualObjectAnchor = ARAnchor(name: virtualObjectAnchorName, transform: transform)
+                self.sceneView.session.add(anchor: self.virtualObjectAnchor!)*/
             }
         }
-        
+    }
+    
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        //print("fun to enable disable save called")
+        switch frame.worldMappingStatus {
+        case .extending, .mapped:
+            btnAnSave.isEnabled =
+                virtualObjectAnchor != nil && frame.anchors.contains(virtualObjectAnchor!)
+        default:
+            btnAnSave.isEnabled = false
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
+        /*let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .horizontal
-        configuration.environmentTexturing = .automatic
+        configuration.environmentTexturing = .automatic*/
         // Run the view's session
-        sceneView.session.run(configuration)
+        sceneView.session.run(defaultConfiguration)
         sceneView.debugOptions = [SCNDebugOptions.showFeaturePoints, SCNDebugOptions.showWorldOrigin]
     }
     
@@ -117,7 +165,21 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             print("Tapped \(String(describing: name)) with the geometry \(String(describing: geomentry))")
         }*/
         
-        if ndStartPost != nil && ndEndPost != nil {
+        // Hit test to find a place for a virtual object.
+        guard let hitTestResult = sceneView
+            .hitTest(sender.location(in: sceneView), types: [.existingPlaneUsingGeometry, .estimatedHorizontalPlane])
+            .first
+            else { return }
+        //print("am hit")
+        // Remove exisitng anchor and add new anchor
+        if let existingAnchor = virtualObjectAnchor {
+            sceneView.session.remove(anchor: existingAnchor)
+        }
+        virtualObjectAnchor = ARAnchor(name: virtualObjectAnchorName, transform: hitTestResult.worldTransform)
+        sceneView.session.add(anchor: virtualObjectAnchor!)
+        print("Saved anchor lets check with reloading...")
+        
+        /*if ndStartPost != nil && ndEndPost != nil {
             ndStartPost?.removeFromParentNode()
             ndEndPost?.removeFromParentNode()
             ndStartPost = nil
@@ -132,7 +194,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             sphere.geometry?.firstMaterial?.diffuse.contents = UIColor.green
             addChildNodeTo(node: sphere, toNode: sceneView.scene.rootNode, inView: sceneView, cameraRelativePost: cameraPosition)
             ndStartPost = sphere
-        }
+        }*/
     }
     
     func addChildNodeTo(node: SCNNode, toNode: SCNNode, inView: ARSCNView, cameraRelativePost: SCNVector3) {
@@ -159,18 +221,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 */
     var virtualObjectAnchor: ARAnchor?
-    let virtualObjectAnchorName = "virtualObject"
+    let virtualObjectAnchorName = "anDrawnVirtualObject"
     
-    func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        print("fun to enable disable save called")
-        switch frame.worldMappingStatus {
-        case .extending, .mapped:
-            btnAnSave.isEnabled =
-                virtualObjectAnchor != nil && frame.anchors.contains(virtualObjectAnchor!)
-        default:
-            btnAnSave.isEnabled = false
-        }
-    }
     
     @IBAction func clickSave(_ sender: UIButton) {
         sceneView.session.getCurrentWorldMap { worldMap, error in
@@ -193,6 +245,44 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 fatalError("Can't save map: \(error.localizedDescription)")
             }
         }
+    }
+    
+    // Called opportunistically to verify that map data can be loaded from filesystem.
+    var mapDataFromFile: Data? {
+        return try? Data(contentsOf: mapSaveURL)
+    }
+    
+    @IBAction func LoadSavedExperience(_ sender: UIButton) {
+        /// - Tag: ReadWorldMap
+        let worldMap: ARWorldMap = {
+            guard let data = mapDataFromFile
+                else { fatalError("Map data should already be verified to exist before Load button is enabled.") }
+            do {
+                guard let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data)
+                    else { fatalError("No ARWorldMap in archive.") }
+                return worldMap
+            } catch {
+                fatalError("Can't unarchive ARWorldMap from file data: \(error)")
+            }
+        }()
+        print("going to load the anchor")
+        // Display the snapshot image stored in the world map to aid user in relocalizing.
+        /*if let snapshotData = worldMap.snapshotAnchor?.imageData,
+         let snapshot = UIImage(data: snapshotData) {
+         self.snapshotThumbnail.image = snapshot
+         } else {
+         print("No snapshot image in world map")
+         }*/
+        // Remove the snapshot anchor from the world map since we do not need it in the scene.
+        worldMap.anchors.removeAll(where: { $0 is SnapshotAnchor })
+        
+        let configuration = self.defaultConfiguration // this app's standard world tracking settings
+        configuration.initialWorldMap = worldMap
+        sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        
+        //isRelocalizingMap = true
+        virtualObjectAnchor = nil
+        print("Loaded anchor")
     }
     
     func session(_ session: ARSession, didFailWithError error: Error) {
