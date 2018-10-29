@@ -93,11 +93,21 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let currentPostitionOfCamera = orientation + location
         DispatchQueue.main.async {
             if self.btnDraw.isHighlighted {
-                let scnDrawNode = SCNNode(geometry: SCNSphere(radius: 0.01))
+                guard let currentFrame = self.sceneView.session.currentFrame else  { return }
+                var translation = matrix_identity_float4x4
+                translation.columns.3.z = -1
+                let transform = currentFrame.camera.transform
+                let rotation = matrix_float4x4(SCNMatrix4MakeRotation(Float.pi/2, 0, 0, 1))
+                let anchorTransform = matrix_multiply(transform, matrix_multiply(translation, rotation))
+                let anchor = ARAnchor(transform: anchorTransform)
+                self.sceneView.session.add(anchor: anchor)
+                /*let anchor = ARAnchor(transform: currentPostitionOfCamera)
+                self.sceneView.session.add(anchor: anchor)*/
+                /*let scnDrawNode = SCNNode(geometry: SCNSphere(radius: 0.01))
                 scnDrawNode.position = currentPostitionOfCamera
                 //scnDrawNode.name = "PointerNode"
                 self.sceneView.scene.rootNode.addChildNode(scnDrawNode)
-                scnDrawNode.geometry?.firstMaterial?.diffuse.contents = UIColor.green
+                scnDrawNode.geometry?.firstMaterial?.diffuse.contents = UIColor.green*/
             } else {
                 let image = UIImage(named: "art.scnassets/plus-8-64.png")
                 let pointerNode = SCNNode(geometry: SCNPlane(width: 0.01, height: 0.01))
@@ -137,7 +147,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     /// - Tag: RestoreVirtualContent
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        guard anchor.name == virtualObjectAnchorName
+        guard !(anchor is ARPlaneAnchor) else { return }
+        let sphereNode = generateSphereNode()
+        DispatchQueue.main.async {
+            node.addChildNode(sphereNode)
+        }
+        /*guard anchor.name == virtualObjectAnchorName
             else { return }
         
         // save the reference to the virtual object anchor when the anchor is added from relocalizing
@@ -145,7 +160,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             virtualObjectAnchor = anchor
         }
         node.addChildNode(virtualObject)
-        print("received anchor and added virtualobject")
+        print("received anchor and added virtualobject")*/
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -157,7 +172,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         configuration.environmentTexturing = .automatic*/
         // Run the view's session
         sceneView.session.run(defaultConfiguration)
-        sceneView.debugOptions = [SCNDebugOptions.showFeaturePoints, SCNDebugOptions.showWorldOrigin]
+        sceneView.debugOptions = [SCNDebugOptions.showFeaturePoints]//, SCNDebugOptions.showWorldOrigin]
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -325,6 +340,18 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sphere.geometry?.firstMaterial?.diffuse.contents = UIColor.cyan
         return sphere
     }()
+    
+    func generateSphereNode() -> SCNNode {
+        let sphere = SCNSphere(radius: 0.01)
+        //let sphere = SCNTorus(ringRadius: 0.01, pipeRadius: 0.001)
+        let sphereNode = SCNNode()
+        sphereNode.position.y += Float(sphere.radius)
+        //sphereNode.position.y += Float(sphere.pipeRadius)
+        //sphereNode.rotation = SCNVector4(1.0, 0, 0, Float(M_PI/4.0))
+        sphereNode.geometry = sphere
+        sphereNode.geometry?.firstMaterial?.diffuse.contents = UIColor.red
+        return sphereNode
+    }
 }
 
 func + (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
