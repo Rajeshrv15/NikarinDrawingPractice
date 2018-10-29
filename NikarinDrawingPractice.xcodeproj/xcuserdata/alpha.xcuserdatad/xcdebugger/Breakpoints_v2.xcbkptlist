@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NikarinDrawingPractice/ViewController.swift"
-            timestampString = "562490590.510048"
+            timestampString = "562491208.42214"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "238"
-            endingLineNumber = "238"
+            startingLineNumber = "251"
+            endingLineNumber = "251"
             landmarkName = "clickSave(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NikarinDrawingPractice/ViewController.swift"
-            timestampString = "562490590.510471"
+            timestampString = "562491208.422598"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "257"
-            endingLineNumber = "257"
+            startingLineNumber = "270"
+            endingLineNumber = "270"
             landmarkName = "LoadSavedExperience(_:)"
             landmarkType = "7">
             <Locations>

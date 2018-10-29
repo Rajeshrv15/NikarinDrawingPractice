@@ -135,6 +135,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
+    /// - Tag: RestoreVirtualContent
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        guard anchor.name == virtualObjectAnchorName
+            else { return }
+        
+        // save the reference to the virtual object anchor when the anchor is added from relocalizing
+        if virtualObjectAnchor == nil {
+            virtualObjectAnchor = anchor
+        }
+        node.addChildNode(virtualObject)
+        print("received anchor and added virtualobject")
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -299,6 +312,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
     }
+    
+    var virtualObject: SCNNode = {
+        /*guard let sceneURL = Bundle.main.url(forResource: "cup", withExtension: "scn", subdirectory: "Assets.scnassets/cup"),
+            let referenceNode = SCNReferenceNode(url: sceneURL) else {
+                fatalError("can't load virtual object")
+        }
+        referenceNode.load()
+        
+        return referenceNode*/
+        let sphere = SCNNode(geometry: SCNSphere(radius: 0.03))
+        sphere.geometry?.firstMaterial?.diffuse.contents = UIColor.cyan
+        return sphere
+    }()
 }
 
 func + (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
