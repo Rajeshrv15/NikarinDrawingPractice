@@ -57,8 +57,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // Set the scene to the view
         //sceneView.scene = scene
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
-        sceneView.addGestureRecognizer(tapGestureRecognizer)
+        //let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
+        //sceneView.addGestureRecognizer(tapGestureRecognizer)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -136,13 +136,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         //print("fun to enable disable save called")
-        switch frame.worldMappingStatus {
+        /*switch frame.worldMappingStatus {
         case .extending, .mapped:
             btnAnSave.isEnabled =
                 virtualObjectAnchor != nil && frame.anchors.contains(virtualObjectAnchor!)
         default:
             btnAnSave.isEnabled = false
-        }
+        }*/
     }
     
     /// - Tag: RestoreVirtualContent
