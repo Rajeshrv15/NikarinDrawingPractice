@@ -86,7 +86,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         //3. Get The World Coordinates
         let worldCoordinates = featurePointHitTest.worldTransform
         
-        let anchor = ARAnchor(name: "AnjplsHelp", transform: worldCoordinates)
+        let anchor = ARAnchor(name: "anSphereAncr", transform: worldCoordinates)
         //let anchor = ARAnchor(transform: anchorTransform)
         self.sceneView.session.add(anchor: anchor)
         //4. Create An SCNNode With An SCNSphere Geeomtery
@@ -118,7 +118,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 let transform = currentFrame.camera.transform
                 let rotation = matrix_float4x4(SCNMatrix4MakeRotation(Float.pi/2, 0, 0, 1))
                 let anchorTransform = matrix_multiply(transform, matrix_multiply(translation, rotation))
-                let anchor = ARAnchor(name: "AnjplsHelp", transform: anchorTransform)
+                let anchor = ARAnchor(name: "anSphereAncr", transform: anchorTransform)
                 //let anchor = ARAnchor(transform: anchorTransform)
                 self.sceneView.session.add(anchor: anchor)
             } else {
@@ -140,7 +140,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     /// - Tag: RestoreVirtualContent
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         guard !(anchor is ARPlaneAnchor) else { return }
-        if anchor.name != "AnjplsHelp" { return }
+        if anchor.name != "anSphereAncr" { return }
         let sphereNode = generateSphereNode()
         DispatchQueue.main.async {
             node.addChildNode(sphereNode)
